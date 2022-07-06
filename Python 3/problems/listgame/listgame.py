@@ -2,26 +2,18 @@
 # Link: https://open.kattis.com/problems/listgame
 
 import sys
+from math import gcd as gcd
 
-# Kattis / Machine input
-for i in sys.stdin:
-    input = int(i)
+# # Kattis / Machine input
+# for i in sys.stdin:
+#     input = int(i)
 
-# # Manual input
-# input = 65536
+# Manual input
+input = 65536
 
 # Functions
 def check_coPrime(a,b):
-    isCoprime = True
-    minAB = min(a,b)
-
-    if minAB < 2:
-        isCoprime = False
-    else:
-        for i in range(2,minAB+1):
-            if (a % i == 0 and b % i == 0):
-                isCoprime = False
-                break
+    isCoprime = (gcd(a,b)==1)
     
     return isCoprime
 

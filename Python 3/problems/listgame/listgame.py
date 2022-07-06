@@ -23,11 +23,11 @@ while ans != 1:
     if int(temp_ans) == temp_ans: # Check if integer
         ans = temp_ans
         k += 1
-    elif div >= maxCheck:
-        k = 1
-        break
     else:
         div += 1
+        if div >= maxCheck:
+            k = 1
+            break
 
 print(k)
 # print("Done!")

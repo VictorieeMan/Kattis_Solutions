@@ -1,7 +1,7 @@
 # Created: 2022-
 # Link: 
 
-import sys
+from sys import stdin, stdout
 
 # # Kattis / Machine input
 # for i in sys.stdin:
@@ -9,3 +9,5 @@ import sys
 
 # Manual input
 input = 
+
+print("Done!")

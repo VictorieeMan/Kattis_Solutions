@@ -3,11 +3,11 @@
 
 from sys import stdin, stdout
 
-# # Kattis / Machine input
-# for i in sys.stdin:
-#     input = int(i)
+# Kattis / Machine input
+# Guide: https://github.com/mwermelinger/kattis-guide/blob/master/input.md
+input = stdin.read()
 
 # Manual input
-input = 
+# input = 
 
 print("Done!")

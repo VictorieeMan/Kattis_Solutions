@@ -3,12 +3,12 @@
 
 import sys
 
-# # Kattis / Machine input
-# for i in sys.stdin:
-#     input = int(i)
+# Kattis / Machine input
+for i in sys.stdin:
+    input = int(i)
 
-# Manual input
-input = 127381
+# # Manual input
+# input = 65536
 
 # Functions
 def check_coPrime(a,b):
@@ -25,14 +25,6 @@ def check_coPrime(a,b):
     
     return isCoprime
 
-# def keep_coPrime(numb, list):
-#     listOfCoprime = [numb]
-#     for i in list:
-#         if check_coPrime(numb,i):
-#             listOfCoprime.append(i)
-#     return listOfCoprime
-
-
 ### Main
 cop_factors = []
 for i in range(2,input):
@@ -44,9 +36,7 @@ for i in range(2,input):
                 if check_coPrime(i, j):
                     cop_factors.append(i)
 
-print(cop_factors)
-
-# print(keep_coPrime(cop_factors[0],cop_factors))
+# print(cop_factors)
 
 ans = input
 k = 1
@@ -65,4 +55,4 @@ while ans > 1:
                 break
 
 print(k)
-print("Done!")
+# print("Done!")

@@ -3,6 +3,7 @@
 
 import sys
 from math import gcd as gcd
+from math import sqrt as sqrt
 
 # # Kattis / Machine input
 # for i in sys.stdin:
@@ -19,7 +20,7 @@ def check_coPrime(a,b):
 
 ### Main
 cop_factors = []
-for i in range(2,input):
+for i in range(2,int(sqrt(input))):
     if (input % i == 0):
         if len(cop_factors) == 0:
             cop_factors.append(i)

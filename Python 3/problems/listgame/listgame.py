@@ -3,24 +3,30 @@
 
 import sys
 
+from math import sqrt as sqrt
+
 # Kattis / Machine input
 for i in sys.stdin:
     input = int(i)
 
 # # Manual input
-# input = 65536
+# input = 127381123
 
 ### Main
+maxCheck = sqrt(input) + 1
 ans = input
 div = 2
 k = 0
 
 while ans != 1:
-    ans /= div
-    if int(ans) == ans:
+    temp_ans = ans / div
+    if int(temp_ans) == temp_ans: # Check if integer
+        ans = temp_ans
         k += 1
+    elif div >= maxCheck:
+        k = 1
+        break
     else:
-        ans = int(ans*div)
         div += 1
 
 print(k)

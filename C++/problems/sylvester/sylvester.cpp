@@ -7,8 +7,15 @@
 
 int main() {
     // Standard input, alter as needed
-    long long a, b;
-    std::cin >> a >> b;
+    int nr;
+    std::cin >> nr;
+
+    long long n, x, y, w, h;
+    for(int i = 0; i < nr; i++){
+        std::cin >> n >> x >> y >> w >> h;
+    }
+
+
 
     // Main code
     // std::cout << "Hello World!";

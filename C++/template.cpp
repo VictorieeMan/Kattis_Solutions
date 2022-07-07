@@ -2,8 +2,9 @@
 // Link: 
 
 // Kattis allows all standard libraries included in C++
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <vector>
 
 int main() {
     // Standard input, alter as needed

@@ -7,23 +7,6 @@
 #include <string>
 #include <vector>
 
-std::vector<int> base_conversion(int p, int b){
-    std::vector<int> in_new_base;
-    int r = (p % b);
-    int q = (p-r)/b;
-
-    while(q != 0){
-        in_new_base.push_back(r);
-        p = q;
-        r = (p % b);
-        q = (p-r)/b;
-    }
-    
-    in_new_base.push_back(r);
-
-    return in_new_base;
-}
-
 int search_result(std::vector<int> vec, int x){
     std::vector<int>::iterator it;
     it = std::find(vec.begin(), vec.end(), x);
@@ -36,12 +19,12 @@ int search_result(std::vector<int> vec, int x){
 }
 
 int main() {
-    // Standard input, alter as needed
     int a;
     std::cin >> a;
 
     std::vector<int> trail_zeroes_count; // Index 0 == Base 2
     for(int i = 2; i < a;i++){
+        //Utilizing The Euclidean Algorithm
         int p = a;
         int b = i;
         int r = (p % b);
@@ -62,12 +45,12 @@ int main() {
         }
     }
     int z_max = *std::max_element(trail_zeroes_count.begin(),trail_zeroes_count.end());
-    std::cout << z_max;
+    // std::cout << z_max;
 
     int base_k = search_result(trail_zeroes_count, z_max) + 2; //Add 2 Because of how vector elements are indexed
     std::cout << base_k;
 
-    std::cout << "Hello World!";
+    // std::cout << "Hello World!";
 
     return 0;
 } 

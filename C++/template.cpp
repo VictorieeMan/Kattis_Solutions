@@ -1,6 +1,7 @@
 // Created: 2022-
 // Link: 
 
+// Kattis allows all standard libraries included in C++
 #include <iostream>
 #include <algorithm>
 

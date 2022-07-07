@@ -4,6 +4,7 @@
 // Kattis allows all standard libraries included in C++
 #include <algorithm>
 #include <iostream>
+#include <string>
 #include <vector>
 
 int main() {

@@ -9,7 +9,7 @@ import sys
 input = sys.stdin.read()
 
 # Manual input
-input = "5\nhello\ni\nam\nan\necho"
+# input = "5\nhello\ni\nam\nan\necho"
 
 lineArray = input.split("\n")
 count = 0

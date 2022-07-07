@@ -1,5 +1,5 @@
-// Created: 2022-
-// Link: 
+// Created: 2022-07-07
+// Link: https://open.kattis.com/problems/gold
 
 // Kattis allows all standard libraries included in C++
 #include <iostream>
@@ -7,10 +7,13 @@
 
 int main() {
     // Standard input, alter as needed
-    long long a, b;
-    std::cin >> a >> b;
+    int W, H;
+    std::cin >> W >> H;
 
-    // Main code
+    for(int i = 0; i < H; i++){
+        // std::cin >> 
+    }
+
     // std::cout << "Hello World!";
 
     return 0;

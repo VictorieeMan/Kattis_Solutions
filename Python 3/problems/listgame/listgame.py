@@ -6,15 +6,15 @@ import sys
 from math import sqrt as sqrt
 
 # Kattis / Machine input
-for i in sys.stdin:
-    input = int(i)
+input = sys.stdin.read()
 
 # # Manual input
 # input = 127381123
 
 ### Main
-maxCheck = sqrt(input) + 1
-ans = input
+number = int(input.split("\n")[0])
+maxCheck = sqrt(number) + 1
+ans = number
 div = 2
 k = 0
 

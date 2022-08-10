@@ -1,8 +1,8 @@
 // Created: 2022-
 // Link: 
 
-//Proglem type:
-//Solution type: 
+//Problem type:
+//Solution: 
 
 // Kattis allows all standard libraries included in C++
 #include <algorithm>

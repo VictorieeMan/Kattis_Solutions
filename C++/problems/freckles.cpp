@@ -2,7 +2,7 @@
 // Link: https://open.kattis.com/problems/freckles
 
 //Problem type: Minimum spanning tree
-//Solution type:
+//Solution: 
 
 // Kattis allows all standard libraries included in C++
 // #include <algorithm>

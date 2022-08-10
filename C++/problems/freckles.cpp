@@ -1,6 +1,9 @@
 // Created: 2022-08-10
 // Link: https://open.kattis.com/problems/freckles
 
+//Problem type: Minimum spanning tree
+//Solution type:
+
 // Kattis allows all standard libraries included in C++
 // #include <algorithm>
 #include <iostream>
@@ -24,16 +27,9 @@ float shortest_path_alg(std::vector<std::pair<float,float>> points){
         }
     }
 
+
     return shortest_path;
 }
-
-/*
-    float shortest_path = 0;
-    for(int i = 0; i < points.size()-1; i++){
-        shortest_path += distance(points[i],points[i+1]);
-    }
-    return shortest_path;
-*/
 
 int main() {
     // N is the number of test cases

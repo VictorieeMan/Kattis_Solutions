@@ -5,30 +5,39 @@
 //Solution: 
 
 // Kattis allows all standard libraries included in C++
-// #include <algorithm>
+#include <algorithm>
 #include <iostream>
-// #include <string>
+#include <string>
 #include <vector>
 #include <cmath>
+
+float round_n(float x, int n = 2) {
+    return roundf(x * pow(10, n)) / pow(10, n);
+}
 
 float distance(std::pair<float,float> p1, std::pair<float,float> p2){
     return sqrt(pow(p1.first-p2.first,2)+pow(p1.second-p2.second,2));
 }
 
 float shortest_path_alg(std::vector<std::pair<float,float>> points){
-    // Using the FLoyd-Warshall algorithm to find the shortest path between all points
-    // https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
-    float shortest_path = 0;
-    int n = points.size();
-    std::vector<std::vector<float>> dist(n, std::vector<float>(n, 0));
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            dist[i][j] = distance(points[i], points[j]);
+    // Greedy algorithm to find the shortest path
+    std::vector<std::pair<float,float>> visited;
+    float min_dist = 0;
+    int n = points.size()-1;
+    visited.push_back(points.back());
+    points.pop_back();
+    for(int i=0; i<n;i++){
+        std::vector<float> distances(points.size());
+        for(int j=0; j<points.size();j++){
+            distances[j] = distance(visited.back(),points[j]);
         }
+        int min_index = std::min_element(distances.begin(),distances.end()) - distances.begin();
+        min_dist += distances[min_index];
+        visited.push_back(points[min_index]);
+        points.erase(points.begin()+min_index);
     }
 
-
-    return shortest_path;
+    return min_dist;
 }
 
 int main() {
@@ -49,7 +58,7 @@ int main() {
             freckles.push_back(std::make_pair(x, y));
         }
         float shrt_path = shortest_path_alg(freckles);
-        std::cout << shrt_path << std::endl;
+        std::cout << round_n(shrt_path) << std::endl;
     }
 
     return 0;

@@ -13,11 +13,11 @@ std::vector<std::vector<int>> knapsack_algorithm(int C, int n, std::vector<std::
     std::vector<std::vector<int>> dp(n+1, std::vector<int>(C+1, 0));
     for(int i = 1; i <= n; i++){
         for(int j = 1; j <= C; j++){
-            if(testCase[i].second > j){
+            if(testCase[i-1].second > j){
                 dp[i][j] = dp[i-1][j];
             }
             else{
-                dp[i][j] = std::max(dp[i-1][j], dp[i-1][j-testCase[i].second] + testCase[i].first);
+                dp[i][j] = std::max(dp[i-1][j], dp[i-1][j-testCase[i-1].second] + testCase[i-1].first);
             }
         }
     }
@@ -60,7 +60,7 @@ int main() {
             testCase.push_back(std::make_pair(value,weight));
         }
         std::vector<std::vector<int>> dp = knapsack_algorithm(capacity, numberOfItems, testCase);
-        generate_output(dp, numberOfItems, capacity, testCase);
+        // generate_output(dp, numberOfItems, capacity, testCase);
     }
 
     return 0;

@@ -1,6 +1,9 @@
 // Created: 2022-08-09
 // Link: https://open.kattis.com/problems/knapsack
 
+// Problem type: 0-1 knapsack problem
+// Solution type: dynamic programming
+
 // Kattis allows all standard libraries included in C++
 #include <algorithm>
 #include <iostream>

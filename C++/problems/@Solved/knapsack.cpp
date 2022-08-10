@@ -4,6 +4,10 @@
 // Problem type: 0-1 knapsack problem
 // Solution type: dynamic programming
 
+//Helpful links:
+// Illustrative: https://www.youtube.com/watch?v=cJ21moQpofY
+// Theory: https://www.youtube.com/watch?v=xOlhR_2QCXY
+
 // Kattis allows all standard libraries included in C++
 #include <algorithm>
 #include <iostream>

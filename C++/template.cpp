@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 int main() {
     // Standard input, alter as needed

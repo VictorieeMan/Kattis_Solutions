@@ -10,34 +10,36 @@
 std::vector<std::vector<int>> knapsack_algorithm(int C, int n, std::vector<std::pair<int,int>> testCase){
     // testCase.first = value
     // testCase.second = weight
-    std::vector<std::vector<int>> dp(n+1, std::vector<int>(C+1, 0));
+    std::vector<std::vector<int>> dpt(n+1, std::vector<int>(C+1, 0));
     for(int i = 1; i <= n; i++){
         for(int j = 1; j <= C; j++){
             if(testCase[i-1].second > j){
-                dp[i][j] = dp[i-1][j];
+                dpt[i][j] = dpt[i-1][j];
             }
             else{
-                dp[i][j] = std::max(dp[i-1][j], dp[i-1][j-testCase[i-1].second] + testCase[i-1].first);
+                dpt[i][j] = std::max(dpt[i-1][j], dpt[i-1][j-testCase[i-1].second] + testCase[i-1].first);
             }
         }
     }
 
-    return dp;
+    return dpt;
 }
 
-void generate_output(std::vector<std::vector<int>> dp, int n, int C, std::vector<std::pair<int,int>> testCase){
-    int i = n;
-    int j = C;
-    while(i > 0 && j > 0){
-        if(dp[i][j] == dp[i-1][j]){
-            i--;
-        }
-        else{
-            std::cout << i << " ";
-            j -= testCase[i].second;
-            i--;
+void generate_output(std::vector<std::vector<int>> dpt, int n, int C, std::vector<std::pair<int,int>> testCase){
+    std::vector<int> output;
+    for(int i = n; i > 0; i--){
+        if(dpt[i][C] != dpt[i-1][C]){
+            output.push_back(i-1);
+            // std::cout << i << std::endl;
+            // std::cout << testCase[i-1].first << " " << testCase[i-1].second << std::endl;
+            C -= testCase[i-1].second;
         }
     }
+    std::cout << output.size() << std::endl;
+        for(int i = 0; i < output.size(); i++){
+            std::cout << output[i] << " ";
+        }
+        std::cout << std::endl;
 }
 
 int main() {
@@ -59,8 +61,8 @@ int main() {
             std::cin >> value >> weight;
             testCase.push_back(std::make_pair(value,weight));
         }
-        std::vector<std::vector<int>> dp = knapsack_algorithm(capacity, numberOfItems, testCase);
-        // generate_output(dp, numberOfItems, capacity, testCase);
+        std::vector<std::vector<int>> dynamic_programming_table = knapsack_algorithm(capacity, numberOfItems, testCase);
+        generate_output(dynamic_programming_table, numberOfItems, capacity, testCase);
     }
 
     return 0;

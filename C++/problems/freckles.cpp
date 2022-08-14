@@ -51,14 +51,19 @@ double shortest_path_alg(std::vector<std::pair<double,double>> points){
 
 // Insert new edge in ascending order of distances
 std::vector<std::tuple<int, int, double>> insert_new_edge_ascOrder(
-    std::vector<std::tuple<int, int, double>> edges,
+    std::vector<std::tuple<int, int, double>>& edges,
     std::tuple<int, int, double> new_edge
     ){
         int n = edges.size();
-        for(int i = 0; i<n; i++){
-            if(std::get<2>(new_edge) < std::get<2>(edges[i])){
-                edges.insert(edges.begin()+i, new_edge);
-                return edges;
+        if(n==0){
+            edges.push_back(new_edge);
+            return edges;
+        } else{
+            for(int i = 0; i<n; i++){
+                if(std::get<2>(new_edge) < std::get<2>(edges[i])){
+                    edges.insert(edges.begin()+i, new_edge);
+                    return edges;
+                }
             }
         }
         return edges;
@@ -111,6 +116,29 @@ double get_edge_length(int a, int b, std::vector<std::tuple<int, int, double>> e
     return std::get<2>(get_edge(a, b, edges));
 }
 
+// Check if node is part of a measured edge
+bool node_is_measured(int a, std::vector<std::tuple<int, int, double>> edges){
+    for(int i=0; i<edges.size();i++){
+        if(std::get<0>(edges[i]) == a || std::get<1>(edges[i]) == a){
+            return true;
+        }
+    }
+    return false;
+}
+
+// Check if edge contains free node
+bool edge_contains_free_node(
+    std::tuple<int, int, double> edge, 
+    std::vector<std::tuple<int, double, double>> free_nodes
+    ){
+        for(int i=0; i<free_nodes.size();i++){
+            if(std::get<0>(edge) == std::get<0>(free_nodes[i]) || std::get<1>(edge) == std::get<0>(free_nodes[i])){
+                return true;
+            }
+        }
+        return false;
+}
+
 // Find shortest edge from visited to a free node
 std::tuple<int, int, double> find_shortest_new_branch(
     std::vector<std::tuple<int, int, double>> edges, 
@@ -118,13 +146,25 @@ std::tuple<int, int, double> find_shortest_new_branch(
     std::vector<std::tuple<int, double, double>> visited, 
     std::vector<std::tuple<int, double, double>> free_nodes
     ){
-        std::tuple<int, int, double> new_visit = free_nodes.back();
-        double edge_length = get_edge_length(std::get<0>(new_visit), std::get<0>(visited.back()), edges);
-        int n = free_nodes.size();
+        std::tuple<int, int, double> new_branch = std::make_tuple(-1,-1,-1);
+        int n = edges.size();
         for(int i=0; i<n;i++){
-            
+            if(edge_contains_free_node(edges[i], free_nodes)){
+                new_branch = edges[i];
+                return new_branch;
+            }
         }
-        return new_visit;
+        return new_branch;
+}
+
+// Find node in vectoor, by index
+int find_node_in_vector(std::vector<std::tuple<int, double, double>> nodes, int index){
+    for(int i=0; i<nodes.size();i++){
+        if(std::get<0>(nodes[i]) == index){
+            return i;
+        }
+    }
+    return -1;
 }
 
 
@@ -132,6 +172,7 @@ std::tuple<int, int, double> find_shortest_new_branch(
 double minimal_spanning_tree_prim(std::vector<std::tuple<int, double, double>> nodes){
     std::vector<std::tuple<int, int, double>> edges;
     // (node_i_idx, node_j_idx, distance/weight)
+    std::tuple<int, int, double> new_edge;
 
     std::vector<std::tuple<int, double, double>> free_nodes = nodes;
     std::vector<std::tuple<int, double, double>> visited; // Also knows as the tree
@@ -149,11 +190,28 @@ double minimal_spanning_tree_prim(std::vector<std::tuple<int, double, double>> n
         // Calculte the node_i spokes, and add them to list of edges
         calculate_spokes(edges, free_nodes, node_i);
         // Find the shortest edge from the visited nodes to a free node
-        find_shortest_new_branch(edges, nodes, visited, free_nodes);
+        new_edge = find_shortest_new_branch(edges, nodes, visited, free_nodes);
+
+        // If no new edge is found, break the loop
+        if(std::get<0>(new_edge) == -1){
+            std::cout << "No new edge found" << std::endl;
+            break;
+        }
+        
+        // Add to the lenght of the minimal spanning tree
+        mst_len += std::get<2>(new_edge);
 
         // Update for next iteration
-        visited.push_back(free_nodes.back());
-        free_nodes.pop_back();
+        int idx = find_node_in_vector(free_nodes, std::get<0>(new_edge));
+        if(idx == -1){
+            idx = find_node_in_vector(free_nodes, std::get<1>(new_edge));
+            if(idx==-1){
+                std::cout << "Node not found" << std::endl;
+                break;
+            }
+        }
+        visited.push_back(free_nodes[idx]);
+        free_nodes.erase(free_nodes.begin() + idx);
         i++;
     }
 

@@ -7,10 +7,10 @@
 // Kattis allows all standard libraries included in C++
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <string>
 #include <vector>
 #include <cmath>
+#include <tuple>
 
 int main() {
     // Standard input, alter as needed

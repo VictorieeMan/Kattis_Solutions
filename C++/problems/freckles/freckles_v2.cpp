@@ -31,7 +31,7 @@ int main() {
             freckles_index.push_back(std::make_tuple(j, x, y));
         }
         double shrt_path = minimal_spanning_tree_prim(freckles_index);
-        std::cout << round_n(shrt_path) << std::endl;
+        std::cout << std::fixed << std::setprecision(2) << shrt_path << std::endl;
     }
 
     return 0;

@@ -47,6 +47,8 @@
         "vector": "cpp",
         "iomanip": "cpp",
         "xlocmon": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "set": "cpp",
+        "xtree": "cpp"
     }
 }

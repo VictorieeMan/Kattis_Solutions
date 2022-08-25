@@ -45,14 +45,18 @@ int main() {
     while(std::getline(std::cin,input_string)){
         input.push_back(input_string);
     }
+    int input_size = input.size();
     std::string pattern;
     std::string text;
-    while(std::cin){
-        std::getline(std::cin, pattern);
-        std::getline(std::cin, text);
+    for(int i=0;i<input_size;){
+        pattern = input[i];
+        text = input[i+1];
+
         std::vector<int> match_idx = search_for_matches(pattern, text);
         output_idx_pattern_matches(match_idx);
         std::cout << std::endl;
+
+        i += 2;
     }
 
     return 0;

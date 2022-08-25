@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <cmath>

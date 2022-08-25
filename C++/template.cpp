@@ -5,6 +5,7 @@
 //Solution: 
 
 // Kattis allows all standard libraries included in C++
+#include <bits/stdc++.h>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>

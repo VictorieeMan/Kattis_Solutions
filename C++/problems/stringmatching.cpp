@@ -35,16 +35,19 @@ void output_idx_pattern_matches(std::vector<int> match_idx){
     //Outputs the indexes from the list.
     int list_size = match_idx.size();
     for(int i = 0; i < list_size; i++){
-        std::cout << match_idx[i] << " ";
+        std::cout << match_idx[i];
+        if(i<list_size-1){
+            std::cout << " ";
+        }
     }
 }
 
 int main() {
     std::string pattern;
     std::string text;
-    while(true){ // Might work for Kattis since, they likely stop the program at end of file.
+    while(std::cin){
         std::getline(std::cin, pattern);
-        std::getline(std::cin,text);
+        std::getline(std::cin, text);
         std::vector<int> match_idx = search_for_matches(pattern, text);
         output_idx_pattern_matches(match_idx);
         std::cout << std::endl;

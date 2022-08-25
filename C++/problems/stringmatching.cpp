@@ -25,7 +25,7 @@ std::vector<int> search_for_matches(std::string pattern, std::string text){
         } else {
             break;
         }
-        
+
         found = text.find(pattern, found+1);
     }
     return matches_idx;
@@ -42,7 +42,9 @@ void output_idx_pattern_matches(std::vector<int> match_idx){
 int main() {
     std::string pattern;
     std::string text;
-    while(std::cin >> pattern >> text){
+    while(true){ // Might work for Kattis since, they likely stop the program at end of file.
+        std::getline(std::cin, pattern);
+        std::getline(std::cin,text);
         std::vector<int> match_idx = search_for_matches(pattern, text);
         output_idx_pattern_matches(match_idx);
         std::cout << std::endl;

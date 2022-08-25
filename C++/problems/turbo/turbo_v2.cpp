@@ -6,6 +6,7 @@
 
 // Kattis allows all standard libraries included in C++
 #include <iostream>
+#include <vector>
 #include <deque>
 
 int find_index(int key, std::deque<int> list){
@@ -26,9 +27,11 @@ std::deque<int> swap_stepping(std::deque<int> list, int a, int b){
 int main() {
     int n;
     std::cin >> n;
-    std::vector<std::pair<int,int>> array(n);
+    std::vector<std::pair<int,int>> array;
     for(int i = 0; i < n; i++){
-        std::cin >> array[i];
+        int numb;
+        std::cin >> numb;
+        array.push_back(std::pair(i,numb));
     }
     
     return 0;

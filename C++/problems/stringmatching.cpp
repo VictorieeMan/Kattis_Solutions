@@ -35,14 +35,16 @@ void output_idx_pattern_matches(std::vector<int> match_idx){
     //Outputs the indexes from the list.
     int list_size = match_idx.size();
     for(int i = 0; i < list_size; i++){
-        std::cout << match_idx[i];
-        if(i<list_size-1){
-            std::cout << " ";
-        }
+        std::cout << match_idx[i] << " ";
     }
 }
 
 int main() {
+    std::vector<std::string> input;
+    std::string input_string;
+    while(std::getline(std::cin,input_string)){
+        input.push_back(input_string);
+    }
     std::string pattern;
     std::string text;
     while(std::cin){

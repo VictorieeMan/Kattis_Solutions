@@ -16,7 +16,17 @@
 std::vector<int> search_for_matches(std::string pattern, std::string text){
     //Search for pattern matches, index them and return the list.
     std::vector<int> matches_idx;
-    
+    std::size_t text_len = text.length();
+    // std::size_t pattern_len = pattern.length();
+    std::size_t found = text.find(pattern);
+    if(found != std::string::npos){
+        for(std::size_t i = 0; i < text_len; i++){
+            found = text.find(pattern, found+1);
+            if(found != std::string::npos){
+                matches_idx.push_back(found);
+            }
+        }
+    }
     return matches_idx;
 }
 

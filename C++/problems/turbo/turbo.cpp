@@ -19,9 +19,9 @@ int find_index(int key, std::deque<int> list){
     return size;
 }
 
-std::deque<int> swap_stepping(std::deque<int> list, int a, int b){
-    // Moves element from 
-}
+// std::deque<int> swap_stepping(std::deque<int> list, int a, int b){
+//     // Moves element from 
+// }
 
 int main() {
     int n;

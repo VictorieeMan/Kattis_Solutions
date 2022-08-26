@@ -64,7 +64,7 @@ int main() {
 
             ++back_idx;
         }
-        std::cout << phase_swaps << std::endl;
+        std::cout << phase_swaps << '\n';
     }
 
     

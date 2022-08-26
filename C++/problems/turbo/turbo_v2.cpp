@@ -41,28 +41,28 @@ int main() {
     int back_idx = 0;
     int phase_swaps;
 
+    int front_key = 1;
+    int back_key = n;
+
     std::vector<int>::iterator it;
 
     for(int i = 0; i < n; i++){
         if(i % 2 == 0){
-            int key = phase[front_idx];
 
-            // int idx = find_index(key, array);
-            it = std::find(array.begin(),array.end(), key);
+            it = std::find(array.begin(),array.end(), front_key);
+            ++front_key;
+
             array.erase(it);
             phase_swaps = it - array.begin();
 
-            ++front_idx;
-
         } else if(i % 2 == 1){
-            int key = phase[phases-back_idx];
+            
+            it = std::find(array.begin(),array.end(), back_key);
+            --back_key;
 
-            // int idx = find_index(key, array);
-            it = std::find(array.begin(),array.end(), key);
             array.erase(it);
             phase_swaps = array.size()-(it - array.begin());
 
-            ++back_idx;
         }
         std::cout << phase_swaps << '\n';
     }

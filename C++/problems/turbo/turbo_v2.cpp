@@ -9,7 +9,7 @@
 #include <vector>
 #include <deque>
 
-int find_index(int key, std::deque<int> list){
+int find_index(int key, std::vector<int> list){
     //Assumes that key actually exist in the list.
     int size = list.size();
     for(int i = 0; i < size; i++){
@@ -20,19 +20,17 @@ int find_index(int key, std::deque<int> list){
     return size;
 }
 
-std::deque<int> swap_stepping(std::deque<int> list, int a, int b){
-    // Moves element from 
-}
-
 int main() {
     int n;
     std::cin >> n;
-    std::vector<std::pair<int,int>> array;
+    std::vector<int> array;
     for(int i = 0; i < n; i++){
         int numb;
         std::cin >> numb;
-        array.push_back(std::pair(i,numb));
+        array.push_back(numb);
     }
+
+    
     
     return 0;
 }

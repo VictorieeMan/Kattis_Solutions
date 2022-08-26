@@ -5,6 +5,7 @@
 //Solution: 
 
 // Kattis allows all standard libraries included in C++
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <deque>
@@ -34,27 +35,36 @@ int main() {
     for(int i = 0; i < n; i++){
         phase[i] = i+1;
     }
-
+    
     int phases = n-1; // Max index of the phases array.
     int front_idx = 0;
     int back_idx = 0;
+    int phase_swaps;
+
+    std::vector<int>::iterator it;
 
     for(int i = 0; i < n; i++){
         if(i % 2 == 0){
             int key = phase[front_idx];
+
+            // int idx = find_index(key, array);
+            it = std::find(array.begin(),array.end(), key);
+            array.erase(it);
+            phase_swaps = it - array.begin();
+
             ++front_idx;
 
-            int idx = find_index(key, array);
-            array.erase(array.begin()+idx);
-            std::cout << idx << std::endl;
         } else if(i % 2 == 1){
             int key = phase[phases-back_idx];
-            ++back_idx;
 
-            int idx = find_index(key, array);
-            array.erase(array.begin()+idx);
-            std::cout << array.size()-idx << std::endl;
+            // int idx = find_index(key, array);
+            it = std::find(array.begin(),array.end(), key);
+            array.erase(it);
+            phase_swaps = array.size()-(it - array.begin());
+
+            ++back_idx;
         }
+        std::cout << phase_swaps << std::endl;
     }
 
     

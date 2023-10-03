@@ -1,5 +1,5 @@
 # Kattis Solutions
-Problem Solving [Kattis](https://open.kattis.com) Problems.
+Problem-Solving [Kattis](https://open.kattis.com) Problems.
 
 The repository is organized by programming language, then by problem name. <!-- Each problem has a README.md file that contains the problem statement, and a solution file. --> Solutions have been created using the following programming languages:
 - C++

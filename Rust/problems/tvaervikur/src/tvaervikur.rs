@@ -4,22 +4,53 @@
 
 use std::io;
 
-fn simulate_game(initial_hp: &Vec<i32>, encounters: &[(i32, i32)], b: i32) -> Vec<i32> {
-    // simulation logic here
-
-	for &(i, j) in encounters.iter() {
-		// Update HP and check for eliminations
-	}
-	
-}
-
-
-fn generate_encounters(n: i32) -> Vec<(i32, i32)> {
-    // generation logic here
-}
-
 fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
+}
+
+fn find_best_player_rank(player_id: usize, mut players: Vec<i32>) -> i32 {
+	//Remove player_i from players
+	let player_i = players.remove(player_id);
+
+	//Sort players in descending order
+	players.sort_by(|a, b| b.cmp(a));
+
+	//find last standing player in players, to later challenge player_i
+	//Strategy designed to weaken the strong players first
+	let last_standing = loop {
+		if players.len() <= 1 {
+			if players.len() < 1 {
+				break 0;
+			}
+			break players[0];
+		}
+
+		//Match up, two strongest players fight
+		players[0] -= 1;
+		players[1] -= 1;
+		if players[0] <= 0 {
+			if(players.len() == 2) {
+				break players[0];
+			}
+			players.remove(0);
+		}
+		if players[1] <= 0 {
+			players.remove(1);
+		}
+
+		//Sort players in descending order, rearrange if needed, strongest first!
+		if players.len() > 2 && players[1] < players[2] {
+			players.sort_by(|a, b| b.cmp(a));
+		} else if players.len() == 2 && players[0] < players[1] {
+			players.swap(0, 1);
+		}
+	};
+
+	if(last_standing < player_i) {
+		return 1;
+	} else {
+		return 2;
+	}
 }
 
 fn main() {
@@ -61,19 +92,45 @@ fn main() {
 	Then we print this vector.
 	*/
 
+	/*
+	Matematical reasoning and simplification of problem:
+	Let S be an unordered set of n players, where each player i has hp_v[i] hp.
+	We have s_i = ceil(hp_v[i]/B) strength of each player i, where strength is
+	the number of fights a player can survive. We want to find the highest rank.
+
+	*Conjecture 1: If s_i, waits for the other to fight among them selves until
+		the very end, then s_i will be guaranteed to be among the last two.
+		*s_i rank 1: if challenger is weaker.
+		*s_i rank 2: if challenger is equal or stronger, due to the rules.
+		if true => We need to find the strenght of the challenger, and compare.
+		Conjecture 2: The weakest challenger is derived by only letting the
+			strongest players fight each other until the end game.
+	
+	These are unproven, but derived from some napkin math and intuition.
+	A prototype will now be implemented, and tested on the sample input.
+	*/
+
 	// init rank_v with -1, indicating not yet calculated
-	let mut rankings: Vec<i32> = vec![-1; initial_hp.len()]; //per game
 	let mut max_rankings: Vec<i32> = vec![-1; n as usize];	//max over all games
 
-	// Generating all possible encounters
-	let encounters = generate_encounters(n);
-
-	for encounters in generate_encounters(n) {
-		let rankings = simulate_game(&hp_v, &encounters, b);
-		// update highest rank achieved for each player
+	//Divide all values in hp_v by B, rounded up, to get strenght of each player
+	for i in 0..n {
+		hp_v[i as usize] = ceil_div(hp_v[i as usize], b);
 	}
 
-	// Was about to move forward with simulating all games, but that might be a combinatorial explosion.
-	// New idea is to use the metric max_encounters = ceil(h_i/B) for each player i, and then try ro individually find the best winnign path for eah player; in games where the other contestans make the best moves fro player i rather than themselves.
+	for i in 0..n {
+		//copy hp_v to hp_v_temp
+		let players: Vec<i32> = hp_v.clone();
+		//Find best rank for player i
+		let best_rank = find_best_player_rank(i as usize, players);
+		//Update max_rankings
+		// if best_rank > max_rankings[i as usize] {
+			max_rankings[i as usize] = best_rank;
+		// }
+	}
 
+	//Print max_rankings
+	for i in 0..n {
+		print!("{} ", max_rankings[i as usize]);
+	}
 }

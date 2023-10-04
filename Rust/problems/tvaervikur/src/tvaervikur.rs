@@ -10,7 +10,7 @@ fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
 }
 
-fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>) -> bool {
+fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32) -> bool {
 	//player_i, is mentioned as s_i in the conjectures below.
 	//Function assumes that players_sorted is sorted in descending order.
 	/*
@@ -30,25 +30,15 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>) -> bool {
 	analysis is needed to determine the final rank of s_i.
 	*/
 
-	// It's important to not double count player_i, hence we remove one value,
-	// equal to player_i. Specific removal of player_i is equivalent.
-	// Using bin-search to find the position of a player_i value in the vector.
+	//Assming player_i isn't the strongest; we have
+	let mut c_max = s_max;
 
-	let mut pos = match players_sorted.binary_search(&player_i) {
-		Ok(index) => index as i32,
-		Err(_) => -1,
-	};
-
-	// Check if pos is last index
+	//Else: We must find the second strongest.
 	let last_idx = players_sorted.len() - 1;
-	let pos_is_last: bool = (pos == last_idx as i32);
-
-	//Now we use the pos value to ignore player_i in the following analysis.
-	let c_max = if pos_is_last {
-		players_sorted[last_idx - 1] // If player_i is last, then c_max is the second last
-	} else {
-		players_sorted[last_idx] // Else c_max is the last
-	};
+	if player_i == s_max{
+		//then c_max is the second to last player in players_sorted
+		c_max = players_sorted[last_idx - 1];
+	}
 
 	//Checking against conjecture 3
 	let numb_of_challengers = last_idx;
@@ -60,7 +50,7 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>) -> bool {
 	return false;
 }
 
-fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &mut Vec<i32>) -> i32 {
+fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &mut Vec<i32>, s_max: i32) -> i32 {
     /*
     Function returns the best rank for player_i, as of conjecture 1, player_i
     is guaranteed to be among the last two players. Hence either a 1 or a two is
@@ -129,7 +119,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	//If more than three players
 
     //Quick check if player_i wins rank 1
-    if quick_check(player_i, players_sorted) {
+    if quick_check(player_i, players_sorted, s_max) {
         // No more investigation needed, player_i wins rank 1; exit.
         return 1;
     }
@@ -222,10 +212,12 @@ fn main() {
     // players is vector of Hp for each contestant
     let mut iter = line.split_whitespace();
     let mut players: Vec<i32> = Vec::with_capacity(n as usize);
+	let mut s_max = -1;
     for i in 0..n as usize {
         //Divide all values in hp_v by B, rounded up, to get strenght of each player
         let strength = ceil_div(iter.next().unwrap().parse().unwrap(), b);
         players.push(strength);
+		s_max = if strength > s_max {strength} else {s_max};
     }
 
     /* Problem formulation:
@@ -268,7 +260,7 @@ fn main() {
 
     for i in 0..n {
         //Find best rank for player i
-        let best_rank = find_best_player_rank(i as usize, &players, &mut players_sorted);
+        let best_rank = find_best_player_rank(i as usize, &players, &mut players_sorted, s_max);
 		//Directly print the best rank
 		print!("{} ", best_rank);
     }

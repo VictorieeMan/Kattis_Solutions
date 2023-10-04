@@ -113,17 +113,20 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 		} else {// c1_id == 1;
 			c2_id = if player_id == 2 {0} else {2};
 		}
-		let mut c1 = players[c1_id];
-		let mut c2 = players[c2_id];
-		if players[c1_id] < players[c2_id]{
+		let mut c1;
+		let mut c2;
+		if players[c1_id] > players[c2_id]{
+			c1 = players[c1_id];
+			c2 = players[c2_id];
+		} else {
 			c1 = players[c2_id];
 			c2 = players[c1_id];
 		}
 
+		//Let c1 and c2 figth each other, till one is left standing.
 		c1 -= c2;
 		c2 = 0;
 
-		//Let c1 and c2 figth each other, till one is left
 		let challenger = c1;
 		if player_i >= challenger {
 			return 1;
@@ -135,11 +138,11 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	////////////////////////////
 	//If more than three players
 
-	// Quick check if player_i wins rank 1
-	if quick_check(player_i, players_sorted) {
-		// No more investigation needed, player_i wins rank 1; exit.
-		return 1;
-	}
+	// // Quick check if player_i wins rank 1
+	// if quick_check(player_i, players_sorted) {
+	// 	// No more investigation needed, player_i wins rank 1; exit.
+	// 	return 1;
+	// }
 
 	//Add the rest of the players to a max heap. (these are the challengers)
 	//Rust heaps are max by default.
@@ -159,11 +162,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	let mut first_run: bool = true;
 
 	while first_run || challenger_heap.len() > 1{
-		// while top2 > 0 && top1 > 0{
-		// 	top1 -= 1;
-		// 	top2 -= 1;
-		// }
-		//Equivalent to the while loop above, but faster
+		//Simulating the two strongest fighting till one is left standing.
 		top1 -= top2;
 		top2 = 0;
 

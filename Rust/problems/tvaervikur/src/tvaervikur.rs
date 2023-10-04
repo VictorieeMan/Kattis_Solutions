@@ -10,7 +10,7 @@ fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
 }
 
-fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
+fn quick_check(player_i: i32, players: &Vec<i32>) -> bool {
 	//player_i, is mentioned as s_i in the conjectures below.
 	/*
 	Conjecture 3: When player s_i waits out the other challengers to fight
@@ -30,13 +30,13 @@ fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
 	*/
 
 	//Sort players in descending order
-	let mut players = players;
-	players.sort_by(|a, b| b.cmp(a));
+	let mut players_sorted = players.to_vec();
+	players_sorted.sort_by(|a, b| b.cmp(a));
 
-	let c_max = players[0];
+	let c_max = players_sorted[0];
 	if player_i >= c_max+1 {
 		return true;
-	} else if (player_i >= c_max-1 && players.len() % 2 == 0) {
+	} else if (player_i >= c_max-1 && players_sorted.len() % 2 == 0) {
 		return true;
 	} 
 	return false;
@@ -53,7 +53,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	let player_i = players[player_id];
 
 	//Quick check if player_i wins rank 1
-	if quick_check(player_i, players.clone()) {
+	if quick_check(player_i, &players) {
 		// No more investigation needed, player_i wins rank 1; exit.
 		return 1;
 	}

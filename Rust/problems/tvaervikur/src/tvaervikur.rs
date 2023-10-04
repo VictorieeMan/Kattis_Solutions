@@ -197,7 +197,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
         challenger_heap.pop().unwrap()
     };
 
-    if(last_standing <= player_i) {
+    if(player_i >= last_standing) {
         return 1;
     } else {
         return 2;

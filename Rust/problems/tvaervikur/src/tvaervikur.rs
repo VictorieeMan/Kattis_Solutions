@@ -34,17 +34,6 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>) -> bool {
 	// equal to player_i. Specific removal of player_i is equivalent.
 	// Using bin-search to find the position of a player_i value in the vector.
 
-	/* Forwarding a vector sorted ascending order instead */ //Keeps for later study
-	// Rust bin-search expects a vector in ascending order, hence we reverse it.
-	// // Temporarily reverse the slice for the binary search.
-	// let reversed: Vec<_> = players_sorted.iter().rev().collect();
-	// let result2 = reversed.binary_search(&&player_i);
-
-	// let pos: i32 = match result2 {
-	// 	Ok(index) => (players_sorted.len() - 1 - index) as i32,  // Convert it back to the index in the original, descending-ordered slice
-	// 	Err(_) => -1,
-	// };
-
 	let mut pos = match players_sorted.binary_search(&player_i) {
 		Ok(index) => index as i32,
 		Err(_) => -1,
@@ -138,11 +127,11 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	////////////////////////////
 	//If more than three players
 
-	// // Quick check if player_i wins rank 1
-	// if quick_check(player_i, players_sorted) {
-	// 	// No more investigation needed, player_i wins rank 1; exit.
-	// 	return 1;
-	// }
+	// Quick check if player_i wins rank 1
+	if quick_check(player_i, players_sorted) {
+		// No more investigation needed, player_i wins rank 1; exit.
+		return 1;
+	}
 
 	//Add the rest of the players to a max heap. (these are the challengers)
 	//Rust heaps are max by default.

@@ -119,7 +119,9 @@ fn main() {
 	let mut iter = line.split_whitespace();
 	let mut players: Vec<i32> = Vec::new();
 	for _ in 0..n {
-		players.push(iter.next().unwrap().parse().unwrap());
+		//Divide all values in hp_v by B, rounded up, to get strenght of each player
+		let strength = ceil_div(iter.next().unwrap().parse().unwrap(), b);
+		players.push(strength);
 	}
 
 	/* Problem formulation:
@@ -155,11 +157,6 @@ fn main() {
 
 	// init rank_v with -1, indicating not yet calculated
 	let mut max_rankings: Vec<i32> = vec![-1; n as usize];	//max over all games
-
-	//Divide all values in hp_v by B, rounded up, to get strenght of each player
-	for i in 0..n {
-		players[i as usize] = ceil_div(players[i as usize], b);
-	}
 
 	for i in 0..n {
 		//Find best rank for player i

@@ -3,6 +3,7 @@
 //Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
 
 use std::io;
+use std::mem::swap;
 use std::collections::BinaryHeap;
 
 fn ceil_div(a: i32, b: i32) -> i32 {
@@ -148,37 +149,31 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
     let mut top2 = challenger_heap.pop().unwrap();
     let mut top3 = challenger_heap.pop().unwrap();
     let mut more_than_two: bool = true;
-    let mut first_run: bool = true;
 
-    while first_run || challenger_heap.len() > 1{
+    while true {
 		//Simulating the two strongest fighting till one is left standing.
         top1 -= top2;
         top2 = 0;
 
-        if more_than_two && top2 < top3 {
-            //Indicates that it's time to extract a new top3
-            if top1 > 0 {
-                challenger_heap.push(top1);
-            }
-            if top2 > 0 {
-                challenger_heap.push(top2);
-            }
-            if top3 > 0 {
+		if top3 > top1 {
+			//Swap top1 and top3
+			swap(&mut top1, &mut top3);
+			if top3 > 0 {
                 challenger_heap.push(top3);
             }
-            more_than_two = if challenger_heap.len() > 2 {true} else {false};
+		}
 
-            if challenger_heap.len() > 1{
-                //Extract new top3
-                top1 = challenger_heap.pop().unwrap();
-                top2 = challenger_heap.pop().unwrap();
-                if more_than_two {
-                    top3 = challenger_heap.pop().unwrap();
-                }
-            }
-        }
+		more_than_two = if challenger_heap.len() > 2 {true} else {false};
 
-        if more_than_two != true && (top1 == 0 || top2 == 0){
+		if !challenger_heap.is_empty() {
+			//Extract new top2 and top3
+			top2 = challenger_heap.pop().unwrap();
+			if more_than_two {
+				top3 = challenger_heap.pop().unwrap();
+			}
+		}
+
+        if more_than_two == false && (top1 == 0 || top2 == 0){
             if top1 > 0 {
                 challenger_heap.push(top1);
             }

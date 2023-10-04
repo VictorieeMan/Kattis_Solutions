@@ -49,9 +49,24 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	returned. THe guick_check() function uses a heuristic to determine if
 	player_i won rank 1, if it returns 0, then further analysis is needed.
 	*/
+	//If only one player
+	if players.len() == 1 {
+		return 1;
+	}
+	//If more than one player
 	//Extract player_i from players
 	let player_i = players[player_id];
 
+	//If only two players
+	if players.len() == 2 {
+		if player_i > players[1] {
+			return 1;
+		} else {
+			return 2;
+		}
+	}
+
+	//If more than two players
 	//Quick check if player_i wins rank 1
 	if quick_check(player_i, &players) {
 		// No more investigation needed, player_i wins rank 1; exit.
@@ -68,8 +83,8 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	//find last standing player in players, to later challenge player_i
 	//Strategy designed to weaken the strong players first
 	while challenger_heap.len() > 1{
-		let top1 = challenger_heap.pop().unwrap();
-		let top2 = challenger_heap.pop().unwrap();
+		let mut top1 = challenger_heap.pop().unwrap();
+		let mut top2 = challenger_heap.pop().unwrap();
 
 		if top1 > 1{
 			challenger_heap.push(top1-1);

@@ -4,6 +4,7 @@
 
 use std::io;
 use std::mem::swap;
+use std::collections::HashMap;
 use std::collections::BinaryHeap;
 
 fn ceil_div(a: i32, b: i32) -> i32 {
@@ -117,54 +118,22 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
         return 1;
     }
 
-	//Seperate the challengers from the player_i
-	let mut challengers = Vec::with_capacity(players_len as usize - 1);
-	for i in 0..players_len as usize {
-		if i != player_id {
-			challengers.push(players[i]);
-		}
-	}
+	//Seperate the challengers from the player_i and put them into a BinaryHeap
+    let mut challengers: BinaryHeap<i32> = players.iter().enumerate()
+		.filter(|&(idx, _)| idx != player_id) 
+		.map(|(_, &val)| val)
+		.collect();
 
-	//Sort challengers in descending order
-	challengers.sort();
+    // While there's more than one challenger, make the two strongest fight
+    while challengers.len() > 1 {
+        let strongest = challengers.pop().unwrap();
+        let next_strongest = challengers.pop().unwrap();
+        let winner_strength = strongest - next_strongest;
+        challengers.push(winner_strength);
+    }
 
-	//Fight among challengers, strongest first
-	let mut last_standing = 0;
-
-	let mut attacker = challengers.len()-1;
-	let mut deffender = attacker-1;
-
-	loop {
-		let att = challengers[attacker];
-		let def = challengers[deffender];
-		let mut diff = att-def;
-
-		if diff >= 0 {
-			challengers[attacker] -= def;
-			challengers[deffender] = 0;
-
-			for i in (0..deffender).rev() {
-				if challengers[i] > 0 {
-					deffender = i;
-					break;
-				}
-			}
-		} else {
-			challengers[attacker] = 0;
-			challengers[deffender] -= att;
-
-			for i in (0..attacker).rev() {
-				if challengers[i] > 0 {
-					attacker = i;
-					break;
-				}
-			}
-		}
-		if deffender == 0 && challengers[deffender] == 0 {
-			last_standing = challengers[attacker];
-			break;
-		}
-	}
+	 // get the last challenger, or 0 if none exist
+    let last_standing = challengers.pop().unwrap_or(0);
 
 	//Fight last_standing against player_i
     if player_i >= last_standing {
@@ -242,9 +211,23 @@ fn main() {
     // init rank_v with -1, indicating not yet calculated
     let mut max_rankings: Vec<i32> = vec![-1; n as usize];  //max over all games
 
+	// Initiate a HashMap to store the best rank for each type of player strength
+	let mut best_rankings: HashMap<i32, i32> = HashMap::new();
+
     for i in 0..n {
         //Find best rank for player i
-        let best_rank = find_best_player_rank(i as usize, &players, s_max, s_2nd_max);
+		//Check if the best rank for this player has already been calculated
+		let best_rank = match best_rankings.get(&players[i as usize]) {
+			Some(&rank) => rank,
+			None => {
+				//If not, calculate it
+				let rank = find_best_player_rank(i as usize, &players, s_max, s_2nd_max);
+				//Store the result in the HashMap
+				best_rankings.insert(players[i as usize], rank);
+				//Return the result
+				rank
+			}
+		};
 		//Directly print the best rank
 		print!("{} ", best_rank);
     }

@@ -150,7 +150,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
     let mut top3 = challenger_heap.pop().unwrap();
     let mut more_than_two: bool = true;
 
-    while true {
+    loop {
 		//Simulating the two strongest fighting till one is left standing.
         top1 -= top2;
         top2 = 0;

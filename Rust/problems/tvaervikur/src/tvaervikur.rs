@@ -73,6 +73,25 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	//////////////////////////
 	//If more than two players
 
+	///////////////////////
+	//If only three players
+	if players.len() == 3 {
+		//Extract the two challenger players, c1 and c2
+		for i in 1..players.len() {
+			if i != player_id {
+				let c1 = players[i];
+				let c2 = players[(i+1)%3];
+
+				//Let c1 and c2 figth each other, till one is left
+				let challenger = (c1-c2).abs();
+				if challenger < player_i {
+					return 1;
+				} else {
+					return 2;
+				}
+			}
+		}
+	}
 
 	////////////////////////////
 	//If more than three players

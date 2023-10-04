@@ -88,31 +88,45 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
         }
     }
 
-    //////////////////////////
-    //If more than two players
+	//////////////////////////
+	//If more than two players
 
-    ///////////////////////
-    //If only three players
-    if players.len() == 3 {
-        //Extract the two challenger players, c1 and c2
-        for i in 1..players.len() {
-            if i != player_id {
-                let c1 = players[i];
-                let c2 = players[(i+1)%3];
+	///////////////////////
+	//If only three players
+	if players.len() == 3 {
+		//Logics for assigning c1 and c2, depending on player_id.
+		//id numbers must be in range 0..2
+		let c1_id = if player_id == 0 {1} else {0};
+		let c2_id;
+		if c1_id == 0{
+			c2_id = if player_id == 1 {2} else {1};
+		} else {// c1_id == 1;
+			c2_id = if player_id == 2 {0} else {2};
+		}
+		let mut c1;
+		let mut c2;
+		if players[c1_id] > players[c2_id]{
+			c1 = players[c1_id];
+			c2 = players[c2_id];
+		} else {
+			c1 = players[c2_id];
+			c2 = players[c1_id];
+		}
 
-                //Let c1 and c2 figth each other, till one is left
-                let challenger = (c1-c2).abs();
-                if challenger < player_i {
-                    return 1;
-                } else {
-                    return 2;
-                }
-            }
-        }
-    }
+		//Let c1 and c2 figth each other, till one is left standing.
+		c1 -= c2;
+		c2 = 0;
 
-    ////////////////////////////
-    //If more than three players
+		let challenger = c1;
+		if player_i >= challenger {
+			return 1;
+		} else {
+			return 2;
+		}
+	}
+
+	////////////////////////////
+	//If more than three players
 
     //Quick check if player_i wins rank 1
     if quick_check(player_i, players_sorted) {

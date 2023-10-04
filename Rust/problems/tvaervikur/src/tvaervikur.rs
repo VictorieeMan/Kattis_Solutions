@@ -268,14 +268,7 @@ fn main() {
     for i in 0..n {
         //Find best rank for player i
         let best_rank = find_best_player_rank(i as usize, &players, &mut players_sorted);
-        //Update max_rankings
-        // if best_rank > max_rankings[i as usize] {
-            max_rankings[i as usize] = best_rank;
-        // }
-    }
-
-    //Print max_rankings
-    for i in 0..n {
-        print!("{} ", max_rankings[i as usize]);
+		//Directly print the best rank
+		print!("{} ", best_rank);
     }
 }

@@ -170,7 +170,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 		challenger_heap.pop().unwrap()
 	};
 
-	if(last_standing < player_i) {
+	if(last_standing <= player_i) {
 		return 1;
 	} else {
 		return 2;

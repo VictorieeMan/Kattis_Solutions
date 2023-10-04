@@ -126,31 +126,30 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
 	}
 
 	//Sort challengers in descending order
-	challengers.sort_by(|a, b| b.cmp(a));
+	challengers.sort();
 
 	//Fight among challengers, strongest first
-	let last_standing = loop {
+	let mut last_standing = 0;
 
-		let mut i = 0;
-		while i + 1 < challengers.len() {
-			challengers[i] -= challengers[i+1];
-			
-			//Challenger = 0, remove from list
-			challengers.remove(i+1);
+	let mut weakest = 0;
+	let mut strongest = challengers.len()-1;
 
-			if challengers[i] <= 0 {
-            challengers.remove(i);
-			} else {
-				i += 1;
-			}
+	while weakest < strongest {
+		//Fight weakest against strongest
+		if challengers[strongest] > challengers[weakest]{
+			challengers[strongest] -= challengers[weakest];
+			challengers[weakest] = 0;
+			weakest += 1;
+		} else {
+			challengers[weakest] = (challengers[weakest] - challengers[strongest]).abs();
+			challengers[strongest] = 0;
+			strongest -= 1;
 		}
-
-		if challengers.len() == 1 {
-			break challengers[0];
-		} else if challengers.len() == 0 {
-			break  0;
+		if weakest == strongest {
+			last_standing = challengers[strongest];
+			break;
 		}
-	};
+	}
 
 	//Fight last_standing against player_i
     if player_i >= last_standing {

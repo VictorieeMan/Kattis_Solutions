@@ -10,9 +10,8 @@ fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
 }
 
-fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32, s_2nd_max: i32) -> bool {
+fn quick_check(player_i: i32, players_len: i32, s_max: i32, s_2nd_max: i32) -> bool {
 	//player_i, is mentioned as s_i in the conjectures below.
-	//Function assumes that players_sorted is sorted in descending order.
 	/*
 	Conjecture 3: When player s_i waits out the other challengers to fight
 		among them selves, the pigeon principle leads to the conclusion that
@@ -34,7 +33,7 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32, s_2nd_m
 	let mut c_max = if player_i == s_max {s_2nd_max} else {s_max};
 
 	//Checking against conjecture 3
-	let numb_of_challengers = players_sorted.len() - 1;
+	let numb_of_challengers = players_len - 1;
 	if player_i >= c_max+1 {
 		return true;
 	} else if (player_i >= c_max-1 && numb_of_challengers % 2 == 0) {
@@ -43,16 +42,17 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32, s_2nd_m
 	return false;
 }
 
-fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &mut Vec<i32>, s_max: i32, s_2nd_max: i32) -> i32 {
+fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd_max: i32) -> i32 {
     /*
     Function returns the best rank for player_i, as of conjecture 1, player_i
     is guaranteed to be among the last two players. Hence either a 1 or a two is
     returned. THe guick_check() function uses a heuristic to determine if
     player_i won rank 1, if it returns 0, then further analysis is needed.
     */
+	let players_len = players.len() as i32;
     ////////////////////
     //If only one player
-    if players.len() == 1 {
+    if players_len == 1 {
         return 1;
     }
 
@@ -63,7 +63,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 
     /////////////////////
     //If only two players
-    if players.len() == 2 {
+    if players_len == 2 {
         if player_i > players[1] {
             return 1;
         } else {
@@ -76,7 +76,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 
 	///////////////////////
 	//If only three players
-	if players.len() == 3 {
+	if players_len == 3 {
 		//Logics for assigning c1 and c2, depending on player_id.
 		//id numbers must be in range 0..2
 		let c1_id = if player_id == 0 {1} else {0};
@@ -112,7 +112,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	//If more than three players
 
     //Quick check if player_i wins rank 1
-    if quick_check(player_i, players_sorted, s_max, s_2nd_max) {
+    if quick_check(player_i, players_len, s_max, s_2nd_max) {
         // No more investigation needed, player_i wins rank 1; exit.
         return 1;
     }
@@ -251,13 +251,9 @@ fn main() {
     // init rank_v with -1, indicating not yet calculated
     let mut max_rankings: Vec<i32> = vec![-1; n as usize];  //max over all games
 
-	//Sort players in descending order
-	let mut players_sorted = players.to_vec();
-	players_sorted.sort();
-
     for i in 0..n {
         //Find best rank for player i
-        let best_rank = find_best_player_rank(i as usize, &players, &mut players_sorted, s_max, s_2nd_max);
+        let best_rank = find_best_player_rank(i as usize, &players, s_max, s_2nd_max);
 		//Directly print the best rank
 		print!("{} ", best_rank);
     }

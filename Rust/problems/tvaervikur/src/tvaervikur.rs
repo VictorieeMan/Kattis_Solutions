@@ -50,6 +50,7 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>) -> bool {
 		players_sorted[last_idx] // Else c_max is the last
 	};
 
+	//Checking against conjecture 3
 	let numb_of_challengers = last_idx;
 	if player_i >= c_max+1 {
 		return true;

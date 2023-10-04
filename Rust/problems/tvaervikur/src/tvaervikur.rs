@@ -98,12 +98,21 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 		//Extract the two challenger players, c1 and c2
 		for i in 1..players.len() {
 			if i != player_id {
-				let c1 = players[i];
-				let c2 = players[(i+1)%3];
+				let c1_id = i;
+				let c2_id = (i+1)%3;
+				let mut c1 = players[c1_id];
+				let mut c2 = players[c2_id];
+				if players[c1_id] < players[c2_id]{
+					c1 = players[c2_id];
+					c2 = players[c1_id];
+				}
+
+				c1 -= c2;
+				c2 = 0;
 
 				//Let c1 and c2 figth each other, till one is left
-				let challenger = (c1-c2).abs();
-				if challenger < player_i {
+				let challenger = c1;
+				if challenger <= player_i {
 					return 1;
 				} else {
 					return 2;

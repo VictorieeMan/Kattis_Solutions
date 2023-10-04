@@ -39,11 +39,23 @@ fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
 }
 
 fn find_best_player_rank(player_id: usize, mut players: Vec<i32>) -> i32 {
+	/*
+	Function returns the best rank for player_i, as of conjecture 1, player_i
+	is guaranteed to be among the last two players. Hence either a 1 or a two is
+	returned. THe guick_check() function uses a heuristic to determine if
+	player_i won rank 1, if it returns 0, then further analysis is needed.
+	*/
 	//Remove player_i from players
 	let player_i = players.remove(player_id);
 
 	//Sort players in descending order
 	players.sort_by(|a, b| b.cmp(a));
+
+	//Quick check if player_i wins rank 1
+	if quick_check(player_i, players.clone()) {
+		// No more investigation needed, player_i wins rank 1; exit.
+		return 1;
+	}
 
 	//find last standing player in players, to later challenge player_i
 	//Strategy designed to weaken the strong players first

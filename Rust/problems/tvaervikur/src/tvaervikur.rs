@@ -118,22 +118,54 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
         return 1;
     }
 
-	//Seperate the challengers from the player_i and put them into a BinaryHeap
-    let mut challengers: BinaryHeap<i32> = players.iter().enumerate()
-		.filter(|&(idx, _)| idx != player_id) 
-		.map(|(_, &val)| val)
-		.collect();
-
-    // While there's more than one challenger, make the two strongest fight
-    while challengers.len() > 1 {
-        let strongest = challengers.pop().unwrap();
-        let next_strongest = challengers.pop().unwrap();
-        let winner_strength = strongest - next_strongest;
-        challengers.push(winner_strength);
+	//Seperate the challengers from the player_i
+    let mut challengers = Vec::with_capacity(players_len as usize - 1);
+    for i in 0..players_len as usize {
+        if i != player_id {
+            challengers.push(players[i]);
+        }
     }
 
-	 // get the last challenger, or 0 if none exist
-    let last_standing = challengers.pop().unwrap_or(0);
+    //Sort challengers in descending order
+    challengers.sort();
+
+    //Fight among challengers, strongest first
+    let mut last_standing = 0;
+
+    let mut attacker = challengers.len()-1;
+    let mut deffender = attacker-1;
+
+    loop {
+        let att = challengers[attacker];
+        let def = challengers[deffender];
+        let mut diff = att-def;
+
+        if diff >= 0 {
+            challengers[attacker] -= def;
+            challengers[deffender] = 0;
+
+            for i in (0..deffender).rev() {
+                if challengers[i] > 0 {
+                    deffender = i;
+                    break;
+                }
+            }
+        } else {
+            challengers[attacker] = 0;
+            challengers[deffender] -= att;
+
+            for i in (0..attacker).rev() {
+                if challengers[i] > 0 {
+                    attacker = i;
+                    break;
+                }
+            }
+        }
+        if deffender == 0 && challengers[deffender] == 0 {
+            last_standing = challengers[attacker];
+            break;
+        }
+    }
 
 	//Fight last_standing against player_i
     if player_i >= last_standing {

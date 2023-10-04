@@ -1,0 +1,1 @@
+The code at this moment cna handle 44 out of 52 test cases, and the error is then due to Time Limit Reached. Future idea for improvment, is to enumerate inputs (value, id) and then direclty add them to a heap. Then operate on the heap instead of a vector.

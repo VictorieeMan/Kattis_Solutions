@@ -152,11 +152,6 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
     let mut first_run: bool = true;
 
     while first_run || challenger_heap.len() > 1{
-        // while top2 > 0 && top1 > 0{
-        //  top1 -= 1;
-        //  top2 -= 1;
-        // }
-        //Equivalent to the while loop above, but faster
         top1 -= top2;
         top2 = 0;
 

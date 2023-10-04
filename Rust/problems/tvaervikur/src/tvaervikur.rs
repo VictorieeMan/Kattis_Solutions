@@ -10,7 +10,7 @@ fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
 }
 
-fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32) -> bool {
+fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32, s_2nd_max: i32) -> bool {
 	//player_i, is mentioned as s_i in the conjectures below.
 	//Function assumes that players_sorted is sorted in descending order.
 	/*
@@ -30,18 +30,11 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32) -> bool
 	analysis is needed to determine the final rank of s_i.
 	*/
 
-	//Assming player_i isn't the strongest; we have
-	let mut c_max = s_max;
-
-	//Else: We must find the second strongest.
-	let last_idx = players_sorted.len() - 1;
-	if player_i == s_max{
-		//then c_max is the second to last player in players_sorted
-		c_max = players_sorted[last_idx - 1];
-	}
+	//Assigning c_max to be the strongest challenger, not player_i
+	let mut c_max = if player_i == s_max {s_2nd_max} else {s_max};
 
 	//Checking against conjecture 3
-	let numb_of_challengers = last_idx;
+	let numb_of_challengers = players_sorted.len() - 1;
 	if player_i >= c_max+1 {
 		return true;
 	} else if (player_i >= c_max-1 && numb_of_challengers % 2 == 0) {
@@ -50,7 +43,7 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>, s_max: i32) -> bool
 	return false;
 }
 
-fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &mut Vec<i32>, s_max: i32) -> i32 {
+fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &mut Vec<i32>, s_max: i32, s_2nd_max: i32) -> i32 {
     /*
     Function returns the best rank for player_i, as of conjecture 1, player_i
     is guaranteed to be among the last two players. Hence either a 1 or a two is
@@ -119,7 +112,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	//If more than three players
 
     //Quick check if player_i wins rank 1
-    if quick_check(player_i, players_sorted, s_max) {
+    if quick_check(player_i, players_sorted, s_max, s_2nd_max) {
         // No more investigation needed, player_i wins rank 1; exit.
         return 1;
     }
@@ -213,11 +206,15 @@ fn main() {
     let mut iter = line.split_whitespace();
     let mut players: Vec<i32> = Vec::with_capacity(n as usize);
 	let mut s_max = -1;
+	let mut s_2nd_max = -1; //Second largest in list
     for i in 0..n as usize {
         //Divide all values in hp_v by B, rounded up, to get strenght of each player
         let strength = ceil_div(iter.next().unwrap().parse().unwrap(), b);
         players.push(strength);
-		s_max = if strength > s_max {strength} else {s_max};
+		if strength > s_max {
+			s_max = strength;
+			s_2nd_max = s_max;
+		}
     }
 
     /* Problem formulation:
@@ -260,7 +257,7 @@ fn main() {
 
     for i in 0..n {
         //Find best rank for player i
-        let best_rank = find_best_player_rank(i as usize, &players, &mut players_sorted, s_max);
+        let best_rank = find_best_player_rank(i as usize, &players, &mut players_sorted, s_max, s_2nd_max);
 		//Directly print the best rank
 		print!("{} ", best_rank);
     }

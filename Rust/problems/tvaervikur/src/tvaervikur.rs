@@ -4,6 +4,7 @@
 
 use std::io;
 
+
 fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
 }
@@ -31,11 +32,10 @@ fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
 	let c_max = players[0];
 	if player_i >= c_max+1 {
 		return true;
-	} else if player_i >= c_max-1 && players.len() % 2 == 0 {
+	} else if (player_i >= c_max-1 && players.len() % 2 == 0) {
 		return true;
-	} else {
-		return false;
-	}
+	} 
+	return false;
 }
 
 fn find_best_player_rank(player_id: usize, mut players: Vec<i32>) -> i32 {

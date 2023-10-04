@@ -12,7 +12,6 @@ fn ceil_div(a: i32, b: i32) -> i32 {
 
 fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
 	//player_i, is mentioned as s_i in the conjectures below.
-	//players Vec<i32> is assumed to be sorted in descending order.
 	/*
 	Conjecture 3: When player s_i waits out the other challengers to fight
 		among them selves, the pigeon principle leads to the conclusion that
@@ -30,6 +29,10 @@ fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
 	analysis is needed to determine the final rank of s_i.
 	*/
 
+	//Sort players in descending order
+	let mut players = players;
+	players.sort_by(|a, b| b.cmp(a));
+
 	let c_max = players[0];
 	if player_i >= c_max+1 {
 		return true;
@@ -39,18 +42,15 @@ fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
 	return false;
 }
 
-fn find_best_player_rank(player_id: usize, mut players: Vec<i32>) -> i32 {
+fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	/*
 	Function returns the best rank for player_i, as of conjecture 1, player_i
 	is guaranteed to be among the last two players. Hence either a 1 or a two is
 	returned. THe guick_check() function uses a heuristic to determine if
 	player_i won rank 1, if it returns 0, then further analysis is needed.
 	*/
-	//Remove player_i from players
-	let player_i = players.remove(player_id);
-
-	//Sort players in descending order
-	players.sort_by(|a, b| b.cmp(a));
+	//Extract player_i from players
+	let player_i = players[player_id];
 
 	//Quick check if player_i wins rank 1
 	if quick_check(player_i, players.clone()) {
@@ -58,35 +58,35 @@ fn find_best_player_rank(player_id: usize, mut players: Vec<i32>) -> i32 {
 		return 1;
 	}
 
+	//Add the rest of the players to a max heap. (these are the challengers)
+	//Rust heaps are max by default.
+	let mut challenger_heap = BinaryHeap::new();
+	for i in 0..players.len() {
+		if i != player_id {
+			challenger_heap.push(players[i]);
+		}
+	}
+
 	//find last standing player in players, to later challenge player_i
 	//Strategy designed to weaken the strong players first
-	let last_standing = loop {
-		if players.len() <= 1 {
-			if players.len() < 1 {
-				break 0;
-			}
-			break players[0];
-		}
+	while challenger_heap.len() > 1{
+		let top1 = challenger_heap.pop().unwrap();
+		let top2 = challenger_heap.pop().unwrap();
 
-		//Match up, two strongest players fight
-		players[0] -= 1;
-		players[1] -= 1;
-		if players[0] <= 0 {
-			if(players.len() == 2) {
-				break players[0];
-			}
-			players.remove(0);
+		if top1 > 1{
+			challenger_heap.push(top1-1);
 		}
-		if players[1] <= 0 {
-			players.remove(1);
+		if top2 > 1{
+			challenger_heap.push(top2-1);
 		}
+	}
 
-		//Sort players in descending order, rearrange if needed, strongest first!
-		if players.len() > 2 && players[1] < players[2] {
-			players.sort_by(|a, b| b.cmp(a));
-		} else if players.len() == 2 && players[0] < players[1] {
-			players.swap(0, 1);
-		}
+	//Testing out some (to me) new rust assignment syntax
+	let last_standing = 
+	if challenger_heap.is_empty() {
+		0
+	} else {
+		challenger_heap.pop().unwrap()
 	};
 
 	if(last_standing < player_i) {
@@ -162,10 +162,8 @@ fn main() {
 	}
 
 	for i in 0..n {
-		//copy players to players_temp
-		let players_temp: Vec<i32> = hp_v.clone();
 		//Find best rank for player i
-		let best_rank = find_best_player_rank(i as usize, players_temp);
+		let best_rank = find_best_player_rank(i as usize, &players);
 		//Update max_rankings
 		// if best_rank > max_rankings[i as usize] {
 			max_rankings[i as usize] = best_rank;

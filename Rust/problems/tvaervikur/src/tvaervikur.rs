@@ -114,16 +114,16 @@ fn main() {
 	line = String::new();
 	stdin.read_line(&mut line).unwrap();
 
-	//Parsing to integer vector hp_v
-	// hp_v is vector of Hp for each contestant
+	//Parsing to integer vector players
+	// players is vector of Hp for each contestant
 	let mut iter = line.split_whitespace();
-	let mut hp_v: Vec<i32> = Vec::new();
+	let mut players: Vec<i32> = Vec::new();
 	for _ in 0..n {
-		hp_v.push(iter.next().unwrap().parse().unwrap());
+		players.push(iter.next().unwrap().parse().unwrap());
 	}
 
 	/* Problem formulation:
-	There are n contestants, each with hp_v[i] hp. They are identified by their
+	There are n contestants, each with players[i] hp. They are identified by their
 	index i in hp_v. At every moment there are still alive = n-dead contestants
 	left.Each time two collide in a fight, they lose B hp each. When a contest-
 	ant's hp reaches 0, they are eliminated and removed from the game:
@@ -158,14 +158,14 @@ fn main() {
 
 	//Divide all values in hp_v by B, rounded up, to get strenght of each player
 	for i in 0..n {
-		hp_v[i as usize] = ceil_div(hp_v[i as usize], b);
+		players[i as usize] = ceil_div(players[i as usize], b);
 	}
 
 	for i in 0..n {
-		//copy hp_v to hp_v_temp
-		let players: Vec<i32> = hp_v.clone();
+		//copy players to players_temp
+		let players_temp: Vec<i32> = hp_v.clone();
 		//Find best rank for player i
-		let best_rank = find_best_player_rank(i as usize, players);
+		let best_rank = find_best_player_rank(i as usize, players_temp);
 		//Update max_rankings
 		// if best_rank > max_rankings[i as usize] {
 			max_rankings[i as usize] = best_rank;

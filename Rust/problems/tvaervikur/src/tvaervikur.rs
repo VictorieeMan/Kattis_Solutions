@@ -117,65 +117,36 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
         return 1;
     }
 
-    //Add the rest of the players to a max heap. (these are the challengers)
-    //Rust heaps are max by default.
-    let mut challenger_heap: BinaryHeap<_> = players.iter().enumerate()
-		.filter_map(|(idx, &player)| {
-			if idx != player_id { Some(player) } else { None }
-		})
-		.collect();
+	//Seperate the challengers from the player_i
+	let challengers_len = players_len - 1;
+	let mut challengers = Vec::with_capacity(players_len as usize - 1);
+	for i in 0..players_len as usize {
+		if i != player_id {
+			challengers.push(players[i]);
+		}
+	}
 
-    //find last standing player in players, to later challenge player_i
-    //Strategy designed to weaken the strong players first
+	//Sort challengers in descending order
+	challengers.sort_by(|a, b| b.cmp(a));
 
-    //Extract top 3 players, use third as a peak forward.
-    let mut top1 = challenger_heap.pop().unwrap();
-    let mut top2 = challenger_heap.pop().unwrap();
-    let mut top3 = challenger_heap.pop().unwrap();
-    let mut more_than_two: bool = true;
+	//Fight among challengers, strongest first
+	let last_standing = loop {
 
-    loop {
-		//Simulating the two strongest fighting till one is left standing.
-        top1 -= top2;
-        top2 = 0;
-
-		if top3 > top1 {
-			//Swap top1 and top3
-			swap(&mut top1, &mut top3);
-			if top3 > 0 {
-                challenger_heap.push(top3);
-            }
+		let mut i = 0;
+		while i + 1 < challengers.len() {
+			challengers[i] -= challengers[i+1];
+			challengers.remove(i+1);
+			i += 1;
 		}
 
-		more_than_two = if challenger_heap.len() > 2 {true} else {false};
-
-		if !challenger_heap.is_empty() {
-			//Extract new top2 and top3
-			top2 = challenger_heap.pop().unwrap();
-			if more_than_two {
-				top3 = challenger_heap.pop().unwrap();
-			}
+		if challengers.len() == 1 {
+			break challengers[0];
+		} else if challengers.len() == 0 {
+			break  0;
 		}
+	};
 
-        if more_than_two == false && (top1 == 0 || top2 == 0){
-            if top1 > 0 {
-                challenger_heap.push(top1);
-            }
-            if top2 > 0 {
-                challenger_heap.push(top2);
-            }
-            break;
-        }
-    }
-
-    //Testing out some (to me) new rust assignment syntax
-    let last_standing = 
-    if challenger_heap.is_empty() {
-        0
-    } else {
-        challenger_heap.pop().unwrap()
-    };
-
+	//Fight last_standing against player_i
     if(player_i >= last_standing) {
         return 1;
     } else {

@@ -49,14 +49,18 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	returned. THe guick_check() function uses a heuristic to determine if
 	player_i won rank 1, if it returns 0, then further analysis is needed.
 	*/
+	////////////////////
 	//If only one player
 	if players.len() == 1 {
 		return 1;
 	}
+
+	/////////////////////////
 	//If more than one player
 	//Extract player_i from players
 	let player_i = players[player_id];
 
+	/////////////////////
 	//If only two players
 	if players.len() == 2 {
 		if player_i > players[1] {
@@ -66,7 +70,12 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 		}
 	}
 
+	//////////////////////////
 	//If more than two players
+
+
+	////////////////////////////
+	//If more than three players
 	//Quick check if player_i wins rank 1
 	if quick_check(player_i, &players) {
 		// No more investigation needed, player_i wins rank 1; exit.
@@ -82,15 +91,47 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 
 	//find last standing player in players, to later challenge player_i
 	//Strategy designed to weaken the strong players first
-	while challenger_heap.len() > 1{
-		let mut top1 = challenger_heap.pop().unwrap();
-		let mut top2 = challenger_heap.pop().unwrap();
 
-		if top1 > 1{
-			challenger_heap.push(top1-1);
+	//Extract top 3 players, use third as a peak forward.
+	let mut top1 = challenger_heap.pop().unwrap();
+	let mut top2 = challenger_heap.pop().unwrap();
+	let mut top3 = challenger_heap.pop().unwrap();
+	let mut more_than_two: bool = true;
+	let mut first_run: bool = true;
+
+	while first_run || challenger_heap.len() > 1{
+		top1 -= 1;
+		top2 -= 1;
+
+		if more_than_two && top2 < top3 {
+			//Indicates that it's time to extract a new top3
+			if top1 > 0 {
+				challenger_heap.push(top1);
+			}
+			if top2 > 0 {
+				challenger_heap.push(top2);
+			}
+			if top3 > 0 {
+				challenger_heap.push(top3);
+			}
+			more_than_two = if challenger_heap.len() > 2 {true} else {false};
+
+			//Extract new top3
+			top1 = challenger_heap.pop().unwrap();
+			top2 = challenger_heap.pop().unwrap();
+			if more_than_two {
+				top3 = challenger_heap.pop().unwrap();
+			}
 		}
-		if top2 > 1{
-			challenger_heap.push(top2-1);
+
+		if more_than_two != true && (top1 == 0 || top2 == 0){
+			if top1 > 1 {
+				challenger_heap.push(top1);
+			}
+			if top2 > 1 {
+				challenger_heap.push(top2);
+			}
+			break;
 		}
 	}
 

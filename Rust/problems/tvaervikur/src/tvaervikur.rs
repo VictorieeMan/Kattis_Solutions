@@ -225,8 +225,8 @@ fn main() {
     //Parsing to integer vector players
     // players is vector of Hp for each contestant
     let mut iter = line.split_whitespace();
-    let mut players: Vec<i32> = Vec::new();
-    for _ in 0..n {
+    let mut players: Vec<i32> = Vec::with_capacity(n as usize);
+    for i in 0..n as usize {
         //Divide all values in hp_v by B, rounded up, to get strenght of each player
         let strength = ceil_div(iter.next().unwrap().parse().unwrap(), b);
         players.push(strength);

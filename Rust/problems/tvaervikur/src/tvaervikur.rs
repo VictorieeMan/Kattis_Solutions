@@ -121,7 +121,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 
 				//Let c1 and c2 figth each other, till one is left
 				let challenger = c1;
-				if challenger <= player_i {
+				if player_i >= challenger {
 					return 1;
 				} else {
 					return 2;
@@ -207,7 +207,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 		challenger_heap.pop().unwrap()
 	};
 
-	if(last_standing <= player_i) {
+	if(player_i >= last_standing) {
 		return 1;
 	} else {
 		return 2;

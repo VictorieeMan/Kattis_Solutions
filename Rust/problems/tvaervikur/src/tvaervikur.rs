@@ -183,8 +183,8 @@ fn main() {
         let strength = ceil_div(iter.next().unwrap().parse().unwrap(), b);
         players.push(strength);
 		if strength > s_max {
-			s_max = strength;
 			s_2nd_max = s_max;
+			s_max = strength;
 		}
     }
 

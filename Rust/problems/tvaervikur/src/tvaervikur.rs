@@ -107,8 +107,15 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 		//Extract the two challenger players, c1 and c2
 		for i in 1..players.len() {
 			if i != player_id {
-				let c1_id = i;
-				let c2_id = (i+1)%3;
+				//Logics for assigning c1 and c2, depending on player_id.
+				//id numbers must be in range 0..2
+				let c1_id = if player_id == 0 {1} else {0};
+				let c2_id;
+				if c1_id == 0{
+					c2_id = if player_id == 1 {2} else {1};
+				} else {// c1_id == 1;
+					c2_id = if player_id == 2 {0} else {2};
+				}
 				let mut c1 = players[c1_id];
 				let mut c2 = players[c2_id];
 				if players[c1_id] < players[c2_id]{
@@ -133,7 +140,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	////////////////////////////
 	//If more than three players
 
-	//Quick check if player_i wins rank 1
+	// Quick check if player_i wins rank 1
 	if quick_check(player_i, players_sorted) {
 		// No more investigation needed, player_i wins rank 1; exit.
 		return 1;

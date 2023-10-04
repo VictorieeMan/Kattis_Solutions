@@ -60,12 +60,10 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 
 	//Add the rest of the players to a max heap. (these are the challengers)
 	//Rust heaps are max by default.
-	let mut challenger_heap = BinaryHeap::new();
-	for i in 0..players.len() {
-		if i != player_id {
-			challenger_heap.push(players[i]);
-		}
-	}
+	let mut challenger_heap: BinaryHeap<_> = players.iter().enumerate()
+		.filter(|&(idx, _)| idx != player_id)
+		.map(|(_, &player)| player)
+		.collect();
 
 	//find last standing player in players, to later challenge player_i
 	//Strategy designed to weaken the strong players first

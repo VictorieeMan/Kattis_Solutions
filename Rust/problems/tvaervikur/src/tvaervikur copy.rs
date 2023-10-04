@@ -81,7 +81,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	/////////////////////
 	//If only two players
 	if players.len() == 2 {
-		if player_i >= players[1] {
+		if player_i >= players[1] { //////////////THIS IS THE ERROR The following works:  player_i > players[1]
 			return 1;
 		} else {
 			return 2;

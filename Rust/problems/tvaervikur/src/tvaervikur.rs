@@ -95,6 +95,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 
 	////////////////////////////
 	//If more than three players
+
 	//Quick check if player_i wins rank 1
 	if quick_check(player_i, &players) {
 		// No more investigation needed, player_i wins rank 1; exit.
@@ -119,8 +120,13 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 	let mut first_run: bool = true;
 
 	while first_run || challenger_heap.len() > 1{
-		top1 -= 1;
-		top2 -= 1;
+		// while top2 > 0 && top1 > 0{
+		// 	top1 -= 1;
+		// 	top2 -= 1;
+		// }
+		//Equivalent to the while loop above, but faster
+		top1 -= top2;
+		top2 = 0;
 
 		if more_than_two && top2 < top3 {
 			//Indicates that it's time to extract a new top3
@@ -135,19 +141,21 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>) -> i32 {
 			}
 			more_than_two = if challenger_heap.len() > 2 {true} else {false};
 
-			//Extract new top3
-			top1 = challenger_heap.pop().unwrap();
-			top2 = challenger_heap.pop().unwrap();
-			if more_than_two {
-				top3 = challenger_heap.pop().unwrap();
+			if challenger_heap.len() > 1{
+				//Extract new top3
+				top1 = challenger_heap.pop().unwrap();
+				top2 = challenger_heap.pop().unwrap();
+				if more_than_two {
+					top3 = challenger_heap.pop().unwrap();
+				}
 			}
 		}
 
 		if more_than_two != true && (top1 == 0 || top2 == 0){
-			if top1 > 1 {
+			if top1 > 0 {
 				challenger_heap.push(top1);
 			}
-			if top2 > 1 {
+			if top2 > 0 {
 				challenger_heap.push(top2);
 			}
 			break;

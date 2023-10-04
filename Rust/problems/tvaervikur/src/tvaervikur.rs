@@ -34,25 +34,34 @@ fn quick_check(player_i: i32, players_sorted: &mut Vec<i32>) -> bool {
 	// equal to player_i. Specific removal of player_i is equivalent.
 	// Using bin-search to find the position of a player_i value in the vector.
 
+	/* Forwarding a vector sorted ascending order instead */ //Keeps for later study
 	// Rust bin-search expects a vector in ascending order, hence we reverse it.
-	// Temporarily reverse the slice for the binary search.
-	let reversed: Vec<_> = players_sorted.iter().rev().collect();
-	let result2 = reversed.binary_search(&&player_i);
+	// // Temporarily reverse the slice for the binary search.
+	// let reversed: Vec<_> = players_sorted.iter().rev().collect();
+	// let result2 = reversed.binary_search(&&player_i);
 
-	let pos: i32 = match result2 {
-		Ok(index) => (players_sorted.len() - 1 - index) as i32,  // Convert it back to the index in the original, descending-ordered slice
+	// let pos: i32 = match result2 {
+	// 	Ok(index) => (players_sorted.len() - 1 - index) as i32,  // Convert it back to the index in the original, descending-ordered slice
+	// 	Err(_) => -1,
+	// };
+
+	let mut pos = match players_sorted.binary_search(&player_i) {
+		Ok(index) => index as i32,
 		Err(_) => -1,
 	};
 
+	// Check if pos is last index
+	let last_idx = players_sorted.len() - 1;
+	let pos_is_last: bool = (pos == last_idx as i32);
 
 	//Now we use the pos value to ignore player_i in the following analysis.
-	let c_max = if pos == 0 {
-		players_sorted[1]
+	let c_max = if pos_is_last {
+		players_sorted[last_idx - 1] // If player_i is last, then c_max is the second last
 	} else {
-		players_sorted[0]
+		players_sorted[last_idx] // Else c_max is the last
 	};
 
-	let numb_of_challengers = players_sorted.len() - 1;
+	let numb_of_challengers = last_idx;
 	if player_i >= c_max+1 {
 		return true;
 	} else if (player_i >= c_max-1 && numb_of_challengers % 2 == 0) {
@@ -269,7 +278,7 @@ fn main() {
 
 	//Sort players in descending order
 	let mut players_sorted = players.to_vec();
-	players_sorted.sort_by(|a, b| b.cmp(a));
+	players_sorted.sort();
 
 	for i in 0..n {
 		//Find best rank for player i

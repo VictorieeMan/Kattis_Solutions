@@ -118,7 +118,6 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
     }
 
 	//Seperate the challengers from the player_i
-	let challengers_len = players_len - 1;
 	let mut challengers = Vec::with_capacity(players_len as usize - 1);
 	for i in 0..players_len as usize {
 		if i != player_id {
@@ -135,8 +134,15 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
 		let mut i = 0;
 		while i + 1 < challengers.len() {
 			challengers[i] -= challengers[i+1];
+			
+			//Challenger = 0, remove from list
 			challengers.remove(i+1);
-			i += 1;
+
+			if challengers[i] <= 0 {
+            challengers.remove(i);
+			} else {
+				i += 1;
+			}
 		}
 
 		if challengers.len() == 1 {
@@ -147,7 +153,7 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, s_max: i32, s_2nd
 	};
 
 	//Fight last_standing against player_i
-    if(player_i >= last_standing) {
+    if player_i >= last_standing {
         return 1;
     } else {
         return 2;

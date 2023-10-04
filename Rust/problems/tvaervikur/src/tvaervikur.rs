@@ -104,36 +104,31 @@ fn find_best_player_rank(player_id: usize, players: &Vec<i32>, players_sorted: &
 	///////////////////////
 	//If only three players
 	if players.len() == 3 {
-		//Extract the two challenger players, c1 and c2
-		for i in 1..players.len() {
-			if i != player_id {
-				//Logics for assigning c1 and c2, depending on player_id.
-				//id numbers must be in range 0..2
-				let c1_id = if player_id == 0 {1} else {0};
-				let c2_id;
-				if c1_id == 0{
-					c2_id = if player_id == 1 {2} else {1};
-				} else {// c1_id == 1;
-					c2_id = if player_id == 2 {0} else {2};
-				}
-				let mut c1 = players[c1_id];
-				let mut c2 = players[c2_id];
-				if players[c1_id] < players[c2_id]{
-					c1 = players[c2_id];
-					c2 = players[c1_id];
-				}
+		//Logics for assigning c1 and c2, depending on player_id.
+		//id numbers must be in range 0..2
+		let c1_id = if player_id == 0 {1} else {0};
+		let c2_id;
+		if c1_id == 0{
+			c2_id = if player_id == 1 {2} else {1};
+		} else {// c1_id == 1;
+			c2_id = if player_id == 2 {0} else {2};
+		}
+		let mut c1 = players[c1_id];
+		let mut c2 = players[c2_id];
+		if players[c1_id] < players[c2_id]{
+			c1 = players[c2_id];
+			c2 = players[c1_id];
+		}
 
-				c1 -= c2;
-				c2 = 0;
+		c1 -= c2;
+		c2 = 0;
 
-				//Let c1 and c2 figth each other, till one is left
-				let challenger = c1;
-				if player_i >= challenger {
-					return 1;
-				} else {
-					return 2;
-				}
-			}
+		//Let c1 and c2 figth each other, till one is left
+		let challenger = c1;
+		if player_i >= challenger {
+			return 1;
+		} else {
+			return 2;
 		}
 	}
 

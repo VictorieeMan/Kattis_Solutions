@@ -8,6 +8,36 @@ fn ceil_div(a: i32, b: i32) -> i32 {
     (a + b - 1) / b
 }
 
+fn quick_check(player_i: i32, players: Vec<i32>) -> bool {
+	//player_i, is mentioned as s_i in the conjectures below.
+	//players Vec<i32> is assumed to be sorted in descending order.
+	/*
+	Conjecture 3: When player s_i waits out the other challengers to fight
+		among them selves, the pigeon principle leads to the conclusion that
+		there are two guaranteed wins for s_i depending on ewather there are
+		an even or odd numbers of challengers left. These are:
+		*If even number of challengers: s_i >= c_max-1
+		*If odd number of challengers: s_i >= c_max+1
+		Where c_max is the strength of the strongest challenger.
+	
+	This function will check these as a heuristic and return true if s_i wins
+	rank 1, and false if s_i loses to the challenger => gets rank 2.
+
+	If this function evaluates to 1, the anser is final.
+	Else if the function evaluates to 0, the answer is not final, and further
+	analysis is needed to determine the final rank of s_i.
+	*/
+
+	let c_max = players[0];
+	if player_i >= c_max+1 {
+		return true;
+	} else if player_i >= c_max-1 && players.len() % 2 == 0 {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 fn find_best_player_rank(player_id: usize, mut players: Vec<i32>) -> i32 {
 	//Remove player_i from players
 	let player_i = players.remove(player_id);

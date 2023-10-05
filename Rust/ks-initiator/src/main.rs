@@ -1,9 +1,8 @@
 //Created: 2023-10-03
 //Purpose: Given a name of a kattis problem, this till initialize a rust project with the correct structure and files.
 
-use std::fs;
-use std::fs::File;
-use std::io::Write;
+use std::fs::{self, File, OpenOptions};
+use std::io::{Read, Write};
 use std::env::args;
 use std::path::Path;
 use std::process::Command;
@@ -14,6 +13,20 @@ use chrono::prelude::*;
 fn todays_date() -> String {
     let now = Local::now();
     now.format("%Y-%m-%d").to_string()
+}
+
+fn alter_cargo_toml(problem_path: &str, problem_name: &str) -> std::io::Result<()> {
+    let cargo_toml_path = format!("{}/Cargo.toml", problem_path);
+
+    // Open Cargo.toml for appending
+    let mut cargo_toml = OpenOptions::new()
+        .append(true)
+        .open(&cargo_toml_path)?;
+
+    // Write the [[bin]] section
+    write!(cargo_toml, "\n[[bin]]\nname = \"{}\"\npath = \"src/{}.rs\"\n", problem_name, problem_name)?;
+
+    Ok(())
 }
 
 fn main() {
@@ -73,6 +86,8 @@ fn main() {
     let main_path = format!("{}/src/main.rs", problem_path);
     fs::remove_file(&main_path).expect("Failed to remove main.rs");
     let template_path = format!("{}/src/{}.rs", problem_path, problem_name);
+
+    ////////////////////////////////////////
     {// Scope for Creating the template file
     let mut template = File::create(&template_path).expect("Failed to create template file");
 
@@ -90,6 +105,52 @@ fn main() {
 
     template.write_all(template_content.as_bytes()).expect("Failed to write to template file");
     }
+
+    alter_cargo_toml(&problem_path, &problem_name).expect("Failed to alter Cargo.toml");
+
+    // ///////////////////////////////////////////////
+    // {//Add a .vscode folder with a launch.json file
+    // let mut launch_json = File::create(format!("{}/.vscode/launch.json", problem_path)).expect("Failed to create launch.json");
+    // let launch_json_content = format!(
+    //     r#"{{
+    //         "version": "0.2.0",
+    //         "configurations": [
+    //             {{
+    //                 "name": "Debug Rust Executable",
+    //                 "type": "cppdbg",
+    //                 "request": "launch",
+    //                 "program": "${{workspaceFolder}}/target/debug/${{workspaceFolderBasename}}",
+    //                 "args": [],
+    //                 "stopAtEntry": false,
+    //                 "cwd": "${{workspaceFolder}}",
+    //                 "environment": [],
+    //                 "externalConsole": true,
+    //                 "MIMode": "gdb",
+    //                 "setupCommands": [
+    //                     {{
+    //                         "description": "Enable pretty-printing for gdb",
+    //                         "text": "-enable-pretty-printing",
+    //                         "ignoreFailures": true
+    //                     }}
+    //                 ],
+    //                 "preLaunchTask": "cargo build",
+    //                 "miDebuggerPath": "/usr/bin/gdb",
+    //                 "linux": {{
+    //                     "MIMode": "gdb"
+    //                 }},
+    //                 "windows": {{
+    //                     "MIMode": "gdb",
+    //                     "miDebuggerPath": "C:\\path\\to\\gdb.exe"
+    //                 }},
+    //                 "osx": {{
+    //                     "MIMode": "lldb"
+    //                 }}
+    //             }}
+    //         ]
+    //     }}"#
+    // );
+    // launch_json.write_all(launch_json_content.as_bytes()).expect("Failed to write to launch.json");
+    // }
 
     // Done!
     println!("Problem {} created successfully", problem_name);

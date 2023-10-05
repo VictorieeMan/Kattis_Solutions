@@ -15,6 +15,28 @@ fn todays_date() -> String {
     now.format("%Y-%m-%d").to_string()
 }
 
+fn generating_starting_point(template_path: &str, problem_name: &str) -> std::io::Result<()> {
+    // Scope for Creating the template file
+    let mut template = File::create(&template_path)?;
+
+    // Writing the template to the file
+    let todays_date = todays_date();
+    let boilerplate_code = "use std::io;\n\nfn main() {\n\tprintln!(\"Hello, world!\");\n}";
+    let template_content = format!(
+"//Created: {} by @VictorieeMan
+//https://open.kattis.com/problems/{}
+//Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
+
+{}"
+        , todays_date, problem_name, boilerplate_code
+    );
+
+    template.write_all(template_content.as_bytes())?;
+    
+    Ok(())
+}
+
+
 fn alter_cargo_toml(problem_path: &str, problem_name: &str) -> std::io::Result<()> {
     let cargo_toml_path = format!("{}/Cargo.toml", problem_path);
 
@@ -87,25 +109,7 @@ fn main() {
     fs::remove_file(&main_path).expect("Failed to remove main.rs");
     let template_path = format!("{}/src/{}.rs", problem_path, problem_name);
 
-    ////////////////////////////////////////
-    {// Scope for Creating the template file
-    let mut template = File::create(&template_path).expect("Failed to create template file");
-
-    // Writing the template to the file
-    let todays_date = todays_date();
-    let boilerplate_code = "use std::io;\n\nfn main() {\n\tprintln!(\"Hello, world!\");\n}";
-    let template_content = format!(
-"//Created: {} by @VictorieeMan
-//https://open.kattis.com/problems/{}
-//Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
-
-{}"
-        , todays_date, problem_name, boilerplate_code
-    );
-
-    template.write_all(template_content.as_bytes()).expect("Failed to write to template file");
-    }
-
+    generating_starting_point(&template_path, problem_name).expect("Failed to generate starting point.");
     alter_cargo_toml(&problem_path, &problem_name).expect("Failed to alter Cargo.toml");
 
     // ///////////////////////////////////////////////

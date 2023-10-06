@@ -2,7 +2,7 @@
 //https://open.kattis.com/problems/fluortanten
 //Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
 
-fn scalar_multiplication(a: &Vec<i64>, b: &Vec<i64>) -> i64 {
+fn scalar_multiplication(a: &[i64], b: &[i64]) -> i64 {
 	let mut result: i64 = 0;
 	for i in 0..a.len() {
 		result += a[i] * b[i];

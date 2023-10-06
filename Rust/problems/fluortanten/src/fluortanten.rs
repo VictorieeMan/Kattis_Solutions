@@ -2,8 +2,8 @@
 //https://open.kattis.com/problems/fluortanten
 //Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
 
-fn scalar_multiplication(a: &Vec<i32>, b: &Vec<i32>) -> i32 {
-	let mut result: i32 = 0;
+fn scalar_multiplication(a: &Vec<i64>, b: &Vec<i64>) -> i64 {
+	let mut result: i64 = 0;
 	for i in 0..a.len() {
 		result += a[i] * b[i];
 	}
@@ -22,9 +22,9 @@ fn main() {
 	// Reading second line and parsing it to a vector of u32
 	stdin.read_line(&mut input).unwrap();
 
-	let mut line_of_quers: Vec<i32> = Vec::with_capacity(n);
+	let mut line_of_quers: Vec<i64> = Vec::with_capacity(n);
 	for a in input.trim().split_whitespace() {
-		line_of_quers.push(a.parse::<i32>().unwrap());
+		line_of_quers.push(a.parse::<i64>().unwrap());
 	}
 	input.clear();
 
@@ -32,7 +32,7 @@ fn main() {
 	line_of_quers.retain(|&x| x != 0);
 	let que_len = n - 1; // Excluding Björn
 
-	let mut que_pos: Vec<i32> = (1..=que_len as i32).collect(); // Vector of que positions
+	let que_pos: Vec<i64> = (1..=que_len as i64).collect(); // Vector of que positions
 	let mut que_sum = scalar_multiplication(&que_pos, &line_of_quers);
 	let mut max_result = que_sum;
 
@@ -43,6 +43,6 @@ fn main() {
 		max_result = std::cmp::max(max_result, que_sum);
 	}
 
-	println!("{}", max_result)
+	println!("{}", max_result);
 
 }

@@ -2,6 +2,7 @@
 //https://open.kattis.com/problems/fluortanten
 //Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
 
+#[inline]
 fn scalar_multiplication(a: &[i64], b: &[i64]) -> i64 {
 	let mut result: i64 = 0;
 	for i in 0..a.len() {

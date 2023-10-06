@@ -36,6 +36,7 @@ fn main() {
 	let mut que_sum = scalar_multiplication(&que_pos, &line_of_quers);
 	let mut max_result = que_sum;
 
+	// Iterating through the line of queers from the end, as B moves forward
 	for i in 0..que_len {
 		let a_i = line_of_quers[que_len - 1 - i];
 		que_sum += a_i;

@@ -3,11 +3,12 @@
 //Repository URL: https://github.com/VictorieeMan/Kattis_Solutions
 
 fn scalar_multiplication(a: &[i64], b: &[i64]) -> i64 {
-	let mut result: i64 = 0;
-	for i in 0..a.len() {
-		result += a[i] * b[i];
-	}
-	result
+	// let mut result: i64 = 0;
+	// for i in 0..a.len() {
+	// 	result += a[i] * b[i];
+	// }
+	// result
+	a.iter().zip(b.iter()).map(|(&a_val, &b_val)| a_val * b_val).sum()
 }
 
 fn main() {

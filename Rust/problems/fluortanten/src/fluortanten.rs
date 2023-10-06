@@ -32,15 +32,15 @@ fn main() {
 	line_of_quers.retain(|&x| x != 0);
 	let que_len = n - 1; // Excluding Björn
 
-	let mut max_result = i32::MIN; // Neat rust trick!
+	let mut que_pos: Vec<i32> = (1..=que_len as i32).collect(); // Vector of que positions
+	let mut que_sum = scalar_multiplication(&que_pos, &line_of_quers);
+	let mut max_result = que_sum;
 
-	let mut que_pos: Vec<i32> = (1..=que_len as i32).collect();
 	for i in 0..que_len {
-		let que_sum: i32 = scalar_multiplication(&que_pos, &line_of_quers);
+		let a_i = line_of_quers[que_len - 1 - i];
+		que_sum += a_i;
 
 		max_result = std::cmp::max(max_result, que_sum);
-
-		que_pos[que_len - 1 - i] += 1;
 	}
 
 	println!("{}", max_result)

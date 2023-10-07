@@ -2,7 +2,7 @@
 //Purpose: Given a name of a kattis problem, this till initialize a rust project with the correct structure and files.
 
 use std::fs::{self, File, OpenOptions};
-use std::io::{Read, Write};
+use std::io::{Write};
 use std::env::args;
 use std::path::Path;
 use std::process::Command;
@@ -67,11 +67,17 @@ fn main() {
         println!("Using problem name: {}", args[1]);
     }
 
-    // Change directory to /problems
-    let path = "./problems";
-    if !Path::new(path).exists() {
-        println!("Directory {} does not exist", path);
-        return;
+    // Change directory to /@problems
+    let path = "./@problems";
+    if !Path::new(&path).exists() {
+        println!("Directory {} does not exist. Creating it now...", path);
+        match fs::create_dir_all(&path) {
+            Ok(_) => println!("Directory {} created successfully", path),
+            Err(e) => {
+                println!("Failed to create directory {}: {}", path, e);
+                return;
+            },
+        }
     }
 
     // Check if the problem already exists
